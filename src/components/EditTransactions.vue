@@ -60,10 +60,44 @@
               </v-select>
             </v-flex>
             <v-flex xs12>
-
+              <v-text-field
+                prepend-icon="description"
+                placeholder="Description"
+                v-model="transaction.description"
+              >
+              </v-text-field>
+            </v-flex>
+            <v-flex xs6>
+              <v-text-field
+                prepend-icon="remove_circle"
+                placeholder="Charge (-)"
+                v-model="transaction.charge"
+              >
+              </v-text-field>
+            </v-flex>
+            <v-flex xs6>
+              <v-text-field
+                prepend-icon="add_circle"
+                placeholder="Deposit (+)"
+                v-model="transaction.description"
+              >
+              </v-text-field>
+            </v-flex>
+            <v-flex xs12>
+              <v-text-field
+                prepend-icon="message"
+                placeholder="Notes"
+                v-model="transaction.notes"
+              >
+              </v-text-field>
             </v-flex>
           </v-layout>
         </v-container>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn flat color="primary" @click="dialog = false"></v-btn>
+          <v-btn flat @click="saveTransaction">Save</v-btn>
+        </v-card-actions>
       </v-card>
     </v-dialog>
   </div>
