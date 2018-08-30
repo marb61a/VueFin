@@ -138,7 +138,15 @@ export default {
       this.dialog = true;
     },
     getCurrentDate: function () {
+      const dt = new Date(Date.now());
+      let month = '' + (dt.getMonth() + 1);
+      let day = '' + dt.getDate();
+      let year = dt.getFullYear();
 
+      if(month.length < 2) month = "0" + month;
+      if(day.length < 2) day = "0" + day;
+
+      return[year, month, day].join('-');
     }
   }
 }
