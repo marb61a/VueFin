@@ -95,7 +95,7 @@
         </v-container>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn flat color="primary" @click="dialog = false"></v-btn>
+          <v-btn flat color="primary" @click="dialog = false">Cancel</v-btn>
           <v-btn flat @click="saveTransaction">Save</v-btn>
         </v-card-actions>
       </v-card>
@@ -105,7 +105,42 @@
 
 <script>
 export default {
+  name: 'EditTransaction',
+  data: () => ({
+    dialog: false,
+    transaction: {
+      id: null,
+      transactionDate: null,
+      transactionType: null,
+      description: '',
+      notes: '',
+      charge: 0.0,
+      deposit: 0.0
+    },
+    transactionTypes: [
+      { text: 'Credit Card', value: 'Credit Card' },
+      { text: 'Debit Card', value: 'Debit Card' },
+      { text: 'Check', value: 'Check' },
+      { text: 'Deposit', value: 'Deposit' },
+    ],
+    transactionDatePicker: false
+  }),
+  methods: {
+    saveTransaction: function () {
+      console.log("Saving transaction record");
 
+      // Todo - Wire up Vuex action
+
+      this.dialog = false;
+    },
+    showEditTransactionDialog: function () {
+      this.transaction.transactionDate = this.getCurrentDate();
+      this.dialog = true;
+    },
+    getCurrentDate: function () {
+
+    }
+  }
 }
 </script>
 
