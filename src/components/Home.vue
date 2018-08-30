@@ -197,6 +197,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <edit-transaction></edit-transaction>
   </div>
 </template>
 
