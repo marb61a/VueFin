@@ -1,18 +1,18 @@
 <template>
-  <v-app id="inspire">
+  <div>
     <v-navigation-drawer
-      :clipped="$vuetify.breakpoint.lgAndUp"
-      v-model="drawer"
       fixed
+      clipped
       app
+      v-model="drawer"
     >
       <v-list dense>
-        <template v-for="item in items">
+        <template v-for="(item, ndx) in menuItems">
           <v-layout
-            v-if="item.heading"
-            :key="item.heading"
             row
+            v-if="item-heading"
             align-center
+            :key="ndx"
           >
             <v-flex xs6>
               <v-subheader v-if="item.heading">
@@ -197,49 +197,38 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-app>
+  </div>
 </template>
 
 <script>
+import Transactions from './Transactions';
+import EditTransactions from './EditTransactions';
+
 export default {
+  name: 'Home',
+  components: {
+    Transactions,
+    EditTransactions
+  },
   data: () => ({
     dialog: false,
     drawer: null,
-    items: [
-      { icon: 'contacts', text: 'Contacts' },
+    menuItems: [
+      { icon: 'contacts', text: 'Add Transaction' },
       { icon: 'history', text: 'Frequently contacted' },
-      { icon: 'content_copy', text: 'Duplicates' },
-      {
-        icon: 'keyboard_arrow_up',
-        'icon-alt': 'keyboard_arrow_down',
-        text: 'Labels',
-        model: true,
-        children: [
-          { icon: 'add', text: 'Create label' }
-        ]
-      },
-      {
-        icon: 'keyboard_arrow_up',
-        'icon-alt': 'keyboard_arrow_down',
-        text: 'More',
-        model: false,
-        children: [
-          { text: 'Import' },
-          { text: 'Export' },
-          { text: 'Print' },
-          { text: 'Undo changes' },
-          { text: 'Other contacts' }
-        ]
-      },
+      { icon: 'content_copy', text: 'Notes' },
       { icon: 'settings', text: 'Settings' },
-      { icon: 'chat_bubble', text: 'Send feedback' },
-      { icon: 'help', text: 'Help' },
-      { icon: 'phonelink', text: 'App downloads' },
-      { icon: 'keyboard', text: 'Go to the old version' }
+      { icon: 'chat_bubble', text: 'Send Feedback' },
+      { icon: 'help', text: 'Help' }
     ]
   }),
-  props: {
-    source: String
+  methods: {
+    menuAction: function () {
+      //Todo
+    },
+    showProfile: function () {
+      console.log('Profile show clicked');
+    }
   }
 }
 </script>

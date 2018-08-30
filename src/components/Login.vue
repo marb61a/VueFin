@@ -25,7 +25,7 @@
         </v-text-field>
       </v-flex>
       <v-flex xs12 sm6 offset-sm3>
-        <v-btn v-on:click="cancel">Cancel</v-btn>
+        <v-btn color="warning" v-on:click="cancel">Cancel</v-btn>
         <v-btn color="primary" v-on:click="login">Login</v-btn>
       </v-flex>
     </v-layout>
