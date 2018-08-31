@@ -62,6 +62,9 @@
           </v-card-text>
         </v-card>
       </template>
+      <template slot="pageText" slot-scope="{ pageStart, pageStop }">
+        From {{ pageStart }} to {{ pageStop }}
+      </template>
     </v-data-table>
   </v-card>
 </template>
@@ -118,7 +121,7 @@ export default {
       const me = this;
       const transDate = new Date(tx.transactionDate);
       let transaction = {
-        transactionDate: me.months[transDate.getUTCMonth() + 1].abrev + '-' + transDate,
+        transactionDate: me.months[transDate.getUTCMonth() + 1].abrev + '-' + transDate.getUTCDate,
         transactionType: tx.transactionType,
         description: tx.description,
         charge: me.moneyFormatter(tx.charge),
@@ -130,8 +133,37 @@ export default {
     },
     moneyFormatter: function (amount) {
       let formatter = new Intl.NumberFormat('en-US', {
-
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 2
       });
+
+      return formatter.format(amount);
+    },
+    calcRunningBalance: function (tx) {
+      if (tx && tx.charge > 0) {
+        this.balanceCharges += charge
+      } else if (tx && tx.deposit > 0) {
+        this.balanceDeposits += tx.deposit;
+      }
+
+      return this.balanceCharges - this.balanceDeposits;
+    },
+    gotoMonth: function (increment) {
+      let newMonth = this.currentMonth += increment;
+      if (newMonth > 12) {
+        newMonth = 1
+        this.currentYear += 1
+      } else if (newMonth < 1) {
+        newMonth = 12
+        this.currentYear -= 1
+      }
+
+      this.currentMonth = newMonth;
+
+      // Load selected month transaction data now...
+      this.getPreviousMonthsBalances();
+      this.getTransactionsByMonth();
     }
   }
 }
