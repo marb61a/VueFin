@@ -93,11 +93,45 @@ export default {
       search: '',
       pagination: {},
       headers: [
-
+        {text: 'Date', align: 'center', sortable: false, value: 'date' },
+        {text: 'Type', align: 'center', sortable: false, value: 'type' },
+        {text: 'Description', align: 'center', sortable: false, value: 'description' },
+        {text: 'Charge (-)', align: 'center', sortable: false, value: 'paymentAmt' },
+        {text: 'Deposit (+)', align: 'center', sortable: false, value: 'depositAmt' },
+        {text: 'Balance', align: 'center', sortable: false, value: 'balance' },
       ],
       items: [
+        {
 
+        }
       ]
+    }
+  },
+  methods: {
+    getTransactionsByMonth: function () {
+
+    },
+    getPreviousMonthsBalances: function () {
+
+    },
+    mapTransaction: function (tx) {
+      const me = this;
+      const transDate = new Date(tx.transactionDate);
+      let transaction = {
+        transactionDate: me.months[transDate.getUTCMonth() + 1].abrev + '-' + transDate,
+        transactionType: tx.transactionType,
+        description: tx.description,
+        charge: me.moneyFormatter(tx.charge),
+        deposit: me.moneyFormatter(tx.deposit),
+        balance: me.moneyFormatter(me.calcRunningBalance(tx))
+      }
+
+      return transaction;
+    },
+    moneyFormatter: function (amount) {
+      let formatter = new Intl.NumberFormat('en-US', {
+
+      });
     }
   }
 }
