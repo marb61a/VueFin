@@ -48,7 +48,42 @@ const actions = {
 }
 
 const mutations = {
+  transactionsByMonth (state, data) {
+    // Ensure that the array is clear at starting
+    state.transactions = []
 
+    if (data && data.length > 0) {
+      data.forEach(tx => {
+        state.transactions.push(mapTransaction(tx, state))
+      })
+    }
+
+    console.log('Transactions by month mutated: ', state.transactions)
+  },
+  balanceCharges (state, data) {
+    state.balanceCharges = data
+  },
+  balanceDeposits (state, data) {
+    state.balanceDeposits = data
+  },
+  gotoMonth (state, increment) {
+    let newMonth = state.currentMonth += increment
+
+    if (newMonth > 12) {
+      newMonth = 1
+      state.currentYear += 1
+    } else if (newMonth < 1) {
+      newMonth = 12
+      state.currentYear -= 1
+    }
+
+    state.currentMonth = newMonth
+  },
+  gotoCurrentMonth (state) {
+    let dt = new Date(Date.now());
+    state.currentMonth = dt.getUTCMonth() + 1
+    state.currentYear = dt.getUTCFullYear()
+  }
 }
 
 /*
