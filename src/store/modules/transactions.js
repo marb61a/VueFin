@@ -80,7 +80,7 @@ const mutations = {
     state.currentMonth = newMonth
   },
   gotoCurrentMonth (state) {
-    let dt = new Date(Date.now());
+    let dt = new Date(Date.now())
     state.currentMonth = dt.getUTCMonth() + 1
     state.currentYear = dt.getUTCFullYear()
   }
@@ -89,6 +89,22 @@ const mutations = {
 /*
   Helper Functions
 */
+function mapTransaction (tx, state) {
+  const transDate = new Date(tx.transactionDate)
+  const months = state.months
+
+  let transaction = {
+    transactionDate: months[transDate.getUTCMonth() + 1].abrev + '-' + transDate.getUTCDate(),
+    transactionType: tx.transactionType,
+    description: tx.description,
+    charge: moneyFormatter(tx.charge),
+    deposit: moneyFormatter(tx.deposit),
+    balance: moneyFormatter(calcRunningBalance(tx, state))
+  }
+
+  return transaction
+}
+
 function moneyFormatter (amount) {
   let formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -97,6 +113,17 @@ function moneyFormatter (amount) {
   })
 
   return formatter.format(amount)
+}
+
+function calcRunningBalance (tx, state) {
+  // Are there any new charges?
+  if (tx && tx.charge > 0) {
+    state.balanceCharges += tx.charge
+  } else if (tx && tx.deposit > 0) {
+    state.balanceDeposits += tx.deposit
+  }
+
+  return state.balanceCharges - state.balanceDeposits
 }
 
 export default {
