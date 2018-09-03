@@ -28,11 +28,40 @@ const getters = {
 }
 
 const actions = {
+  getTransactionsByMonth ({ commit, state, rootState }, payload) {
+    commit('transactionsByMonth', [])
 
+    // Todo API Call
+  },
+  getPreviousMonthsBalances ({ commit, state, rootState }, payload) {
+    commit('transactionsByMonth', [])
+    // Todo API Call
+    commit('balanceCharges', 0)
+    commit('balanceDeposits', 0)
+  },
+  async gotoMonth ({ commit }, increment) {
+    commit('gotoMonth', increment)
+  },
+  async gotoCurrentMonth ({ commit }) {
+    commit('gotoCurrentMonth')
+  }
 }
 
 const mutations = {
 
+}
+
+/*
+  Helper Functions
+*/
+function moneyFormatter (amount) {
+  let formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2
+  })
+
+  return formatter.format(amount)
 }
 
 export default {
