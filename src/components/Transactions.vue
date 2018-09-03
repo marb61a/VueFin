@@ -71,6 +71,18 @@
 
 <script>
 export default {
+  computed: {
+    currentMonth () {
+      return this.$store.state.transactions.currentMonth
+    },
+    currentYear () {
+      return this.$store.state.transactions.currentYear
+    },
+    months () {
+      return this.$store.state.transactions.months
+    },
+
+  },
   data () {
     return {
       months: [
@@ -112,63 +124,40 @@ export default {
   },
   methods: {
     getTransactionsByMonth: function () {
-
+      this.$store.dispatch('getTransactionsByMonth')
     },
     getPreviousMonthsBalances: function () {
-
-    },
-    mapTransaction: function (tx) {
-      const me = this;
-      const transDate = new Date(tx.transactionDate);
-      let transaction = {
-        transactionDate: me.months[transDate.getUTCMonth() + 1].abrev + '-' + transDate.getUTCDate,
-        transactionType: tx.transactionType,
-        description: tx.description,
-        charge: me.moneyFormatter(tx.charge),
-        deposit: me.moneyFormatter(tx.deposit),
-        balance: me.moneyFormatter(me.calcRunningBalance(tx))
-      }
-
-      return transaction;
-    },
-    moneyFormatter: function (amount) {
-      let formatter = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 2
-      });
-
-      return formatter.format(amount);
-    },
-    calcRunningBalance: function (tx) {
-      if (tx && tx.charge > 0) {
-        this.balanceCharges += charge
-      } else if (tx && tx.deposit > 0) {
-        this.balanceDeposits += tx.deposit;
-      }
-
-      return this.balanceCharges - this.balanceDeposits;
+      this.$store.dispatch('getPreviousMonthsBalances')
     },
     gotoMonth: function (increment) {
-      let newMonth = this.currentMonth += increment;
-      if (newMonth > 12) {
-        newMonth = 1
-        this.currentYear += 1
-      } else if (newMonth < 1) {
-        newMonth = 12
-        this.currentYear -= 1
-      }
+      this.$store.dispatch('gotoMonth')
+        .then(() => {
+          // Load selected month transaction data now...
+          this.getPreviousMonthsBalances()
+          this.getTransactionsByMonth()
+        })
+    },
+    gotoCurrentMonth: function () {
+      this.$store.dispatch('gotoCurrentMonth')
+        .then(() => {
+          // Load selected month transaction data now...
+          this.getPreviousMonthsBalances()
+          this.getTransactionsByMonth()
+        })
+    },
+    mounted: async function () {
+      await this.getPreviousMonthsBalances()
+      await console.log(this.balanceCharges)
+      await console.log(this.balanceDeposits)
 
-      this.currentMonth = newMonth;
-
-      // Load selected month transaction data now...
-      this.getPreviousMonthsBalances();
-      this.getTransactionsByMonth();
+      await this.getTransactionsByMonth()
     }
   }
 }
 </script>
 
-<style>
-
+<style scoped>
+  .transactions {
+    width: 100%;
+  }
 </style>
