@@ -35,7 +35,7 @@
         </v-card-title>
         <v-card-text>
           <v-container grid-list-md>
-            <v-layout-wrap>
+            <v-layout wrap>
               <v-flex xs12 sm6>
                 <v-text-field
                   label="First name"
@@ -52,9 +52,57 @@
                 >
                 </v-text-field>
               </v-flex>
-            </v-layout-wrap>
+              <v-flex xs12>
+                <v-text-field
+                  label="Email"
+                  v-model="user.email"
+                  hint="This is also your login username"
+                  persistent-hint
+                  required
+                >
+                </v-text-field>
+              </v-flex>
+              <v-flex xs12>
+                <v-text-field
+                  label="Password"
+                  v-model="user.password"
+                  type="password"
+                  required
+                >
+                </v-text-field>
+              </v-flex>
+              <v-flex xs12>
+                <v-text-field
+                  label="Verify Password"
+                  v-model="user.verfiyPassword"
+                  type="password"
+                  hint="When changing your password, please enter twice"
+                  persistent-hint
+                  :rules="[
+                    () => user.password == user.verfiyPassword ||
+                    'Passwords entered do not match'
+                  ]"
+                  required
+                >
+                </v-text-field>
+              </v-flex>
+            </v-layout>
           </v-container>
+          <small>*indicates required field</small>
         </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="blue darken-1"
+            flat
+            @click.native="profileDialog = false"
+          >
+            Close
+          </v-btn>
+          <v-btn color="blue darken-1" flat @click="saveProfile">
+            Save
+          </v-btn>
+        </v-card-actions>
       </v-card>
     </v-dialog>
   </div>
