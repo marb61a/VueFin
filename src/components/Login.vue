@@ -33,9 +33,15 @@
       :timeout="6000"
       :top="true"
       v-model="showAlert"
-
     >
-      {{ message }}
+      {{ loginError }}
+      <v-btn
+        flat
+        color="pink"
+        v-on:click="showAlert = false"
+      >
+        Close
+      </v-btn>
     </v-snackbar>
   </v-container>
 </template>
@@ -57,16 +63,29 @@ export default {
       ]
     }
   },
+  computed: {
+    isLoggedIn () {
+      return this.$store.getters.isLoggedIn
+    },
+    loginError () {
+      return this.$store.getters.loginError
+    }
+  },
   methods: {
     login: function () {
-      const vm = this;
-      if(vm.password === 'test111'){
-        this.$router.push({ path: '/' })
-      } else {
-        // Show an alert to user with the error
-        vm.showAlert = true;
-        vm.message = "Email or password is invalid"
+      const vm = this
+      const payload = {
+        email: this.email,
+        password: this.password
       }
+      this.$store.dispatch('logInUser', payload)
+        .then(() => {
+          if(vm.isLoggedIn){
+            this.$router.push({ path: '/' })
+          } else {
+            vm.showAlert = true
+          }
+        })
     },
     cancel: function () {
       console.log("The user does not wish to login");

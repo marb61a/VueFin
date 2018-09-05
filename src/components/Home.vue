@@ -71,9 +71,13 @@
       clipped-left
       fixed
     >
-      <v-toolbar-title :style="$vuetify.breakpoint.smAndUp ? '' : 'min-width: 72px'" class="ml-0 pl-3">
-        <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-        <span class="hidden-xs-only">Globomantics Rewards</span>
+      <v-toolbar-title
+        :style="$vuetify.breakpoint.smAndUp ? '' : 'min-width: 72px'"
+        class="ml-0 pl-3"
+      >
+        <v-toolbar-side-icon @click.stop="drawer = !drawer">
+        </v-toolbar-side-icon>
+        <span class="hidden-xs-only">VueFin Rewards</span>
       </v-toolbar-title>
       <!-- <v-text-field
         light
@@ -96,14 +100,16 @@
 </template>
 
 <script>
-import Transactions from './Transactions';
-import EditTransactions from './EditTransactions';
+import Transactions from './Transactions'
+import EditTransactions from './EditTransactions'
+import HeaderActions from './HeaderActions.vue'
 
 export default {
   name: 'Home',
   components: {
     Transactions,
-    EditTransactions
+    EditTransactions,
+    HeaderActions
   },
   computed: {
     isLoggedIn () {
