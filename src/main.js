@@ -4,14 +4,24 @@ import Vue from 'vue'
 import Vuetify from 'vuetify'
 import App from './App'
 import router from './router'
+import axios from 'axios'
+
+// Store (Vuex)
+import store from './store'
 
 Vue.config.productionTip = false
 
 Vue.use(Vuetify)
 
+// Ensure axios is globally available
+Vue.axios = Vue.prototype.$http = axios.create({
+  baseURL: 'http://localhost:8081/api'
+})
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
+  store,
   router,
   components: { App },
   template: '<App/>'
