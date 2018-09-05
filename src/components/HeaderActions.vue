@@ -34,7 +34,26 @@
           <span class="headline">User Profile</span>
         </v-card-title>
         <v-card-text>
-
+          <v-container grid-list-md>
+            <v-layout-wrap>
+              <v-flex xs12 sm6>
+                <v-text-field
+                  label="First name"
+                  v-model="user.first"
+                  required
+                >
+                </v-text-field>
+              </v-flex>
+              <v-flex xs12 sm6>
+                <v-text-field
+                  label="Last name"
+                  v-model="user.last"
+                  required
+                >
+                </v-text-field>
+              </v-flex>
+            </v-layout-wrap>
+          </v-container>
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -56,7 +75,28 @@
       }
     },
     methods: {
+      showProfile: function () {
+        this.profileDialog = true
+      },
+      saveProfile: function () {
+        let vm = this
+        this.$store.dispatch('updateUserProfile', this.user)
+          .then(() => {
+            vm.password = vm.verfiyPassword = ''
+          })
 
+        this.profileDialog = false
+      },
+      logout: function () {
+        // TODO
+      }
+    },
+    mounted: function () {
+      const loggedInUser = this.$store.state.user
+
+      this.user.first = loggedInUser.first
+      this.user.last = loggedInUser.last
+      this.user.email = loggedInUser.email
     }
   }
 </script>
