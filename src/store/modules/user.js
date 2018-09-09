@@ -48,10 +48,28 @@ const actions = {
       })
   },
   async loadUserProfile ({ commit }) {
-
+    // Get the user object for the logged in user
+    await Vue.axios.get('/user/' + this.userId)
+      .then((resp) => {
+        let data = resp.data
+        console.log('loadUserProfile data:', data)
+      })
   },
   updateUserProfile ({ commit }, payload) {
+    bcrypt.hash(payload.password, 8, (err, hash) => {
+      if (!err) {
+        payload.password = hash
+        console.log('password hash: ', payload.password)
 
+        Vue.axios.put('/user/' + this.state.user.userId, payload)
+          .then((resp) => {
+            console.log(resp)
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      }
+    })
   }
 }
 
