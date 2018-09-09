@@ -29,6 +29,9 @@ const getters = {
   balanceDeposits: state => state.balanceCharges
 }
 
+/*
+  Actions
+*/
 const actions = {
   getTransactionsByMonth ({ commit, state, rootState }, payload) {
     commit('transactionsByMonth', [])
@@ -74,9 +77,28 @@ const actions = {
   },
   async gotoCurrentMonth ({ commit }) {
     commit('gotoCurrentMonth')
+  },
+  saveTransaction ({ commit, dispatch, state, rootState }, transaction) {
+    // Add the logged in userId to transaction payload
+    transaction.userId = rootState.user.userId
+
+    Vue.axios.post('/transaction', transaction)
+      .then((resp) => {
+        dispatch('getTransactionsByMonth')
+          .then(() => {
+            dispatch('getPreviousMonthsBalances')
+          })
+      })
+      .catch((err) => {
+        console.log('Error saving transaction')
+        console.log(err)
+      })
   }
 }
 
+/*
+  Mutations
+*/
 const mutations = {
   transactionsByMonth (state, data) {
     // Ensure that the array is clear at starting

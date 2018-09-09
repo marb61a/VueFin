@@ -1,3 +1,6 @@
+import Vue from 'vue'
+import bcrypt from 'bcryptjs'
+
 const state = {
   email: '',
   userId: null,
@@ -11,8 +14,11 @@ const getters = {
   loginError: state => state.loginError
 }
 
+/*
+  Actions
+*/
 const actions = {
-  logInUser ({ commit }, payload) {
+  async logInUser ({ commit }, payload) {
     if (payload.email === 'test1@user.com' && payload.password === 'test111') {
       // Simulate getting back a valid userId from API call...
       payload.userId = '5a777f0a75f64a1698221d98'
@@ -23,11 +29,16 @@ const actions = {
   }
 }
 
+/*
+  Mutations
+*/
 const mutations = {
   logInUser (state, payload) {
-    state.email = payload.email
-    state.userId = payload.userId
     state.isLoggedIn = true
+    state.email = payload.email
+    state.first = payload.first
+    state.last = payload.last
+    state.userId = payload.userId
   },
   loginError (state) {
     state.isLoggedIn = false
