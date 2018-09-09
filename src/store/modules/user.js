@@ -4,6 +4,8 @@ import bcrypt from 'bcryptjs'
 const state = {
   email: '',
   userId: null,
+  first: '',
+  last: '',
   isLoggedIn: false,
   loginError: ''
 }
@@ -19,13 +21,37 @@ const getters = {
 */
 const actions = {
   async logInUser ({ commit }, payload) {
-    if (payload.email === 'test1@user.com' && payload.password === 'test111') {
-      // Simulate getting back a valid userId from API call...
-      payload.userId = '5a777f0a75f64a1698221d98'
-      commit('logInUser', payload)
-    } else {
-      commit('loginError')
-    }
+    await Vue.axios.get('/user/email/' + payload.email)
+      .then((resp) => {
+        let data = resp.data
+
+        if (data && data.length > 0) {
+          /*
+            Test the payload which is the password entered
+            against the user object
+          */
+          const pwdHash = data[0].password
+          if (bcrypt.compareSync(payload.password, pwdHash)) {
+            const user = data[0]
+            payload.userId = user._id
+            payload.first = user.first
+            payload.last = user.last
+            payload.email = user.email
+            commit('logInUser', payload)
+          } else {
+            commit('loginError')
+          }
+        }
+      })
+      .catch(() => {
+        commit('loginError')
+      })
+  },
+  async loadUserProfile ({ commit }) {
+
+  },
+  updateUserProfile ({ commit }, payload) {
+
   }
 }
 
